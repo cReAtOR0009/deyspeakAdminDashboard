@@ -1,0 +1,22 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    
+</html>
+<h2>ERROR PAGE</h2>
+
+<%  response = response %>
+<p><%= response.data %></p>
+<p><%= response.status %></p>
+    <% if (response.data.length == 0 ) { %>
+     <h1>no errors</h1>
+<% } else {%>
+
+    <% response.data.forEach(error => { %>
+        <h2> <%=error%> </h2>
+   <% } ); %>
+<% } %>
+
+</body>

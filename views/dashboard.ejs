@@ -1,0 +1,305 @@
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Prompt&family=Ubuntu&display=swap');
+ * {
+    border: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    font-family: 'Ubuntu';
+    /* border:1px solid red; */
+  }
+
+  .container {
+    display: flex; 
+    flex-wrap: nowrap;
+  }
+
+  .sidebar {
+    width: 200px;
+    height: 100vh;
+    background-color: #082266;
+    color: #fff;
+    padding: 20px;
+    height: 100vh;
+  }
+.sidebar .nav{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* align-items: center; */
+}
+  .sidebar.active {
+    width: 50px;
+  }
+
+  .nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav-item {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .nav-item:hover {
+    background-color: #FFBC14;
+  }
+
+  .nav-item.active {
+    background-color: #FFBC14;
+    font-weight: bold;
+  }
+
+  .content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #FFBC14;
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+  .delete-language, .delete-module, .delete-lesson {
+    border: 20px;
+    background-color: red;
+    cursor: pointer;
+  }
+
+
+
+</style>
+  <h1>dashboard</h1>
+  <%  response= response %>
+  <div class="container">
+    <div class="sidebar">
+      <ul class="nav">
+        <li class="nav-item active" onclick="changeTab(0)">Language</li>
+        <li class="nav-item " onclick="changeTab(1)">modules</li>
+        <li class="nav-item " onclick="changeTab(2)">Lessons</li>
+        <li class="nav-item " onclick="changeTab(3)">lesson-items</li>
+        <li class="nav-item " onclick="changeTab(4)">levels</li>
+        <li class="nav-item " onclick="changeTab(5)">Settings</li>
+      </ul>
+
+    </div>
+    <div class="content">
+      <div class="tab-content active">
+        <h1>LANGUAGES</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>S/N</th>
+              <th>NAME</th>
+              <th>DESCRIPTION</th>
+            </tr>
+          </thead>
+         
+          <% if (response.data.languages.length > 0) { %>
+          <tbody>
+            <% response.data.languages.forEach((language, index) => { %>
+            <tr data-id="<%=language.id%>">
+              <td> <%=index+1%></td> 
+              <td> <%=language.name %></td>
+              <td> <%=language.description%></td>
+              <td role="button" class="delete-language"> delete</td>
+            </tr>
+            <% }) %>
+          </tbody>
+          
+          <% } else { %>
+          <p>no language to display</p>
+          <% } %>
+        </table>
+        
+      </div>
+      <div class="tab-content">  
+        <h1>MODULES</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>S/N</th>
+              <th>NAME</th>
+              <th>details</th>
+              <th>success_percentage</th>
+              <th>level</th>
+              <th>status</th>
+              <th>icon</th>
+              <th>lessonsz</th>
+              <th>lessons</th>
+            </tr>
+          </thead>
+         
+          <% if (response.data.modules.length > 0) { %>
+          <tbody>
+            <% response.data.modules.forEach((module, index) => { %>
+            <tr data-id="<%=module.id%>">
+              <td> <%=index+1%></td>
+              <td> <%=module.name %></td>
+              <td> <%=module.description%></td>
+              <td> <%=module.success_percentage%></td>
+              <td> <%=module.level%></td>
+              <td> <%=module.status%></td>
+              <td> <img src="<%= module.icon%>" alt="<% module.name %> icon"></td>
+              <td>
+                <% let arrayLesson = [...module.lessons] %>
+                <% if(arrayLesson.length > 0) { %>
+                  <table >
+                  <% arrayLesson.forEach(lesson => { %>
+                    <tr>
+                      <td><%=lesson.name %></td>
+                      <td><%=lesson.order %></td>
+                  </tr>
+                  <% }) %>
+                  </table>
+                  <% } else { %>
+                    <p>no module lesson to display</p>
+                    <% } %>
+              </td>
+              <td role="button" class="delete-module">delete</td>
+            </tr>
+            <% }) %>
+          </tbody>
+          
+          <% } else { %>
+          <p>no module to display</p>
+          <% } %>
+        </table>
+      </div>
+      <div class="tab-content">
+        <h2> Lessons </h2>
+        <table>
+          <thead>
+            <tr>
+              <th>S/N</th>
+              <th>NAME</th>
+              <th>ORDER</th>
+              <th>DETAILS</th>
+              <th>FLASH-CONTENT1</th>
+              <th>FLASH-CONTENT2</th>
+              <th>ICON</th>
+              <th>STATUS</th>
+              <th>LESSON-ITEMS</th>
+            </tr>
+          </thead>
+         
+          <% if (response.data.lessons.length > 0) { %>
+          <tbody>
+            <% response.data.lessons.forEach((lesson, index) => { %>
+            <tr data-id="<%=lesson.id%>">
+              <td> <%=index+1%></td>
+              <td> <%=lesson.name %></td>
+              <td> <%=lesson.order%></td>
+              <td> <%=lesson.details%></td>
+              <td> <%=lesson.flash_content_one%></td>
+              <td> <%=lesson.flash_content_two%></td>
+              <td> <img src="<%=lesson.icon %>" alt="<%=lesson.name%> lesson icon"></td>
+              <td> <%=lesson.status%></td>
+              <td>
+                <% let Lessonitems = [...lesson.lesson_items] %>
+                <% if(Lessonitems.length > 0) { %>
+                  <table >
+                  <% Lessonitems.forEach(lessonitem => { %>
+                    <tr>
+                      <td><%=lessonitem.name %></td>
+                      <td><%=lessonitem.order %></td>
+                  </tr>
+                  <% }) %>
+                  </table>
+                  <% } else { %>
+                    <p>no lesson itemsto display</p>
+                    <% } %>
+              </td>
+                </td>
+                <td role="button" class="delete-lesson">delete</td>
+            </tr>
+            <% }) %>
+          </tbody>
+          
+          <% } else { %>
+          <p>no lessons to display</p>
+          <% } %>
+        </table>
+      </div>
+      <div class="tab-content">
+        <h2> Lessons-Items </h2>
+      </div>
+      <div class="tab-content">
+        <h2> Levels </h2>
+      </div>
+      <div class="tab-content">
+        <h2> Settings </h2>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function changeTab(tabIndex) {
+      console.log("clicked tab btn");
+      const navItems = document.querySelectorAll('.nav-item');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      // Remove active class from all nav items and tab contents
+      navItems.forEach(item => item.classList.remove('active'));
+      tabContents.forEach(content => content.classList.remove('active'));
+
+      // Add active class to selected nav item and tab content
+      navItems[tabIndex].classList.add('active');
+      tabContents[tabIndex].classList.add('active');
+      // window.location.href = `/admin_panel/${tabIndex}`;
+    };
+
+    function toggleSidebar() {
+      console.log("hello")
+      const sidebar = document.querySelector('.sidebar');
+      sidebar.classList.toggle('sidebar-closed');
+    }
+
+    function deleter() {
+      const deleteLanguage_Btns = document.querySelectorAll(".delete-language");
+      const deleteModule_Btns = document.querySelectorAll(".delete-module");
+      const deleteLessons_Btns = document.querySelectorAll(".delete-lesson");
+
+      deleteLanguage_Btns.forEach(btn => {
+        btn.addEventListener("click", () => {
+        let parent_element = btn.parentNode;
+        let del_id = parent_element.dataset.id;
+        console.log(del_id);
+
+        // fetch(`/language/:${del_id}`, {
+        //     method: 'DELETE'
+        //   })
+        //   .then(response => response.json())
+        //   .then(response => {
+        //     alert("item deleted successful")
+        //     location.reload()
+        //   })
+    
+        } )
+      });
+      deleteModule_Btns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          let parent_element = btn.parentNode;
+          let btn_id = parent_element.dataset.id;
+          console.log(btn_id)
+        })
+      });
+
+      deleteLessons_Btns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          let parent_element = btn.parentNode;
+          let btn_id = parent_element.dataset.id;
+          console.log(btn_id)
+        })
+      })
+    }
+    deleter()
+  </script>
+</body>
